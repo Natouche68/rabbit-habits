@@ -5,15 +5,16 @@ import {
 	pgTable,
 	serial,
 	varchar,
+	text,
 } from "drizzle-orm/pg-core";
 
 export const users = pgTable("users", {
 	id: serial("id").primaryKey(),
 	username: varchar("username").notNull().unique(),
-	password: varchar("password").notNull(),
+	password: text("password").notNull(),
 	image: varchar("image"),
 	authorization_code: varchar("authorization_code"),
-	time_at_last_code: integer("time_at_last_code"),
+	time_at_last_code: varchar("time_at_last_code"),
 	friends: json("friends").$type<number[]>(),
 });
 
