@@ -38,5 +38,17 @@
 			<button type="submit">Sign Up</button>
 		</form>
 	</div>
-	<div use:melt={$content("log-in")}>Log In</div>
+	<div use:melt={$content("log-in")}>
+		<form action="?/login" method="POST" use:enhance>
+			<div>
+				<label for="username">Username</label>
+				<input type="text" name="username" id="username" required />
+			</div>
+			<div>
+				<label for="password">Password</label>
+				<input type="password" name="password" id="password" required />
+			</div>
+			<button type="submit">Log In</button>
+		</form>
+	</div>
 </div>
