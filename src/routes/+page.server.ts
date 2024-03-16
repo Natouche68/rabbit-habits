@@ -50,6 +50,10 @@ export const actions: Actions = {
 			.from(users)
 			.where(eq(users.username, username));
 
+		if (user.length === 0) {
+			error(400, "Invalid username or password");
+		}
+
 		const [salt, key] = user[0].password.split(":");
 		const hashedPassword = scryptSync(password, salt, 64);
 		const match = timingSafeEqual(Buffer.from(key, "hex"), hashedPassword);
@@ -64,5 +68,9 @@ export const actions: Actions = {
 				path: "/",
 			});
 		}
+	},
+	logout: async ({ cookies }) => {
+		cookies.delete("user_id", { path: "/" });
+		cookies.delete("authorization_code", { path: "/" });
 	},
 };
