@@ -1,9 +1,15 @@
-import type { Actions } from "./$types";
-import { error } from "@sveltejs/kit";
+import type { Actions, PageServerLoad } from "./$types";
+import { error, redirect } from "@sveltejs/kit";
 import { db } from "$lib/server/db";
 import { users } from "$lib/server/schema";
 import { eq } from "drizzle-orm";
 import { scryptSync, randomBytes, timingSafeEqual } from "crypto";
+
+export const load: PageServerLoad = async ({ locals }) => {
+	if (locals.user) {
+		throw redirect(303, "/");
+	}
+};
 
 export const actions: Actions = {
 	signup: async ({ request, cookies }) => {
@@ -39,6 +45,8 @@ export const actions: Actions = {
 		cookies.set("authorization_code", authorizationCode, {
 			path: "/",
 		});
+
+		redirect(303, "/");
 	},
 	login: async ({ request, cookies }) => {
 		const data = await request.formData();
@@ -68,6 +76,8 @@ export const actions: Actions = {
 				path: "/",
 			});
 		}
+
+		redirect(303, "/");
 	},
 	logout: async ({ cookies }) => {
 		cookies.delete("user_id", { path: "/" });
